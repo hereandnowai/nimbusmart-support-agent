@@ -4,7 +4,7 @@ from app.session import ChatSession
 
 class PolicyPlugin:
     def __init__(self, session: ChatSession) -> None:
-        self.session = session
+        self._session = session
 
     @kernel_function(
         description=(

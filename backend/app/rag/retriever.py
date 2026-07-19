@@ -37,7 +37,7 @@ class HybridRetriever:
         self._documents: list[str] = data["documents"] or []
         self._metadatas: list[dict] = [dict(m) for m in data["metadatas"] or []]
         self._bm25 = BM25Okapi([_tokenize(d) for d in self._documents])
-        self._id_to_index = {id: i for i, id_ in enumerate(self._ids)}
+        self._id_to_index = {id_: i for i, id_ in enumerate(self._ids)}
 
     async def search(self, query: str, top_k: int = FINAL_TOP_K) -> list[Candidate]:
         vector_ranked = await self._vector_search(query)
@@ -62,7 +62,7 @@ class HybridRetriever:
         for ranking in rankings:
             for rank, id_ in enumerate(ranking):
                 scores[id_] = scores.get(id_, 0.0) + 1.0 / (RRF_K + rank + 1)
-            return sorted(scores, key=lambda id_: scores[id_], reverse=True)
+        return sorted(scores, key=lambda id_: scores[id_], reverse=True)
         
     def _to_candidate(self, id_: str) -> Candidate:
         i = self._id_to_index[id_]
